@@ -1,30 +1,14 @@
 Vendor Qualification System
-Approach
+1. Approach
 
-Data Loading:
+The vendor qualification system identifies top vendors that align with a user’s software requirements. The approach is divided into several key steps:
 
-The vendor data is loaded from a CSV file containing various features like product name, rating, seller, main category, and detailed feature descriptions.
+#Data Loading: The system loads a CSV file containing vendor information including product name, seller, rating, features, and main category.
 
-Text Preprocessing:
+#Text Preprocessing: All text data is converted to lowercase, special characters are removed, and the text is tokenized. Stopwords are removed, and both lemmatization and stemming are applied to standardize the terms.
 
-  Text normalization: All text data (such as product descriptions and features) is preprocessed by converting it to lowercase, removing special characters, and tokenizing the text.
-  Stopwords removal: Commonly used words that don’t provide much meaning (e.g., “and”, “the”, etc.) are removed from the text.
-  Lemmatization and Stemming: Words are reduced to their root forms using both a lemmatizer and a stemmer to improve consistency across similar terms (e.g., “running” becomes “run”).
+#TF-IDF Vectorization: We use TF-IDF (Term Frequency-Inverse Document Frequency) to convert the cleaned text into numerical vectors. Importantly, vectorization is done for each feature separately, rather than combining all text into one long document. This avoids the dilution of similarity scores, especially when long descriptions would otherwise dominate shorter but more relevant features.
 
-TF-IDF Vectorization:
+Similarity Scoring: The input query (based on software category and required capabilities) is also processed and vectorized. Cosine similarity is calculated between the query and each feature to assess relevance.
 
-A TF-IDF (Term Frequency-Inverse Document Frequency) approach is used to transform the feature descriptions into vectors. Vectorization is done for each feature separately, as treating all features as one long string would dilute the similarity scores, especially when features have vastly different lengths. This ensures that each feature's importance is captured independently, enabling more accurate similarity scoring between the query and each individual feature.
-
-Similarity Scoring:
-
-For each vendor, the cosine similarity between the processed query and the feature descriptions is computed. Cosine similarity measures how similar two vectors are, ranging from 0 (completely different) to 1 (identical).
-
-Filtering and Ranking:
-
-Vendors with similarity scores above a certain threshold (e.g., 0.6) are considered to be highly relevant.
-The vendors are ranked based on their average similarity scores, with the most relevant vendors appearing at the top.
-A final score is calculated for each vendor based on the similarity across multiple features.
-
-Final Output:
-
-The top 10 vendors with the highest scores are returned, providing the best matches to the given query.
+Filtering and Ranking: Only vendors with a similarity score above a chosen threshold are considered. These are then ranked based on their average similarity score across features. The top 10 ranked vendors are returned as the most qualified options.

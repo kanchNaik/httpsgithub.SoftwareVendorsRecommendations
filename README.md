@@ -13,6 +13,11 @@ Similarity Scoring: The input query (based on software category and required cap
 
 Filtering and Ranking: Only vendors with a similarity score above a chosen threshold are considered. These are then ranked based on their average similarity score across features. The top 10 ranked vendors are returned as the most qualified options.
 
+Code Flow -
+- Submitted 3 code flows
+- 1st is a Python script in a collab file, where I was trying my TF-IDF approach - loading dataset, cleaning and pre-processing, computing TF-IDF, computing similarity based on cosine similarity, and finally ranking.
+- The 2nd is the flask application. I divided the code into multiple files and folders to make the architecture extensible for future use. code starts with the app.py file which contains the endpoint for API. VendorQualifier file has an orchestrator method that orchestrates all steps from reading data from the input file to ranking and filtering qualified vendors. CommonProcessingUtility contains methods that are generic and can be used in multiple places for leveraging common functionality. FullDataVectorizer contains a method that computes TF-IDF vectors and returns vectorized df. SimilarityEvaluator contains method which computes cosine similarity and filters df records based on similarity. These all files contain additional methods which I created to store pre-computed vectorizers to further enhance the model but I was encountering a few issues with re-loading vectorizers from pickle files and due to time constraints I could not give it more time. but it is further possibility to improve architecture.
+
 2. Challenges Encountered
 
 Data Cleanliness: Some rows had improperly formatted or missing JSON in the features column, requiring additional error handling.
@@ -30,3 +35,5 @@ Use More Advanced Embeddings: Instead of TF-IDF, using semantic vectorization mo
 User Feedback Loop: Collecting user feedback on recommended vendors could help improve the model over time.
 
 Dynamic Thresholding: Rather than a fixed cutoff, adaptive thresholds based on query specificity or vendor categories could improve relevance.
+
+one of the approaches is using disltilBert model it is a lightweight model that performs similarly to BERT. we can train model and store it in pickle file and use it to predict similarity. since we are using a deep learning model, the model will itself learn features and we don't have to setup threshold manually. LoRA and QoRA fine-tunning techniques can be used to further optimize the model. I have added sample code, which is still not performing well but can be explored further to obtain better results. I also added some smoothing function but this model needs further work refer Ranking vendors by BERT.ipynb.
